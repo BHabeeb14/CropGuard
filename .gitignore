@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+.ipynb_checkpoints/
+*.py[cod]
+*.egg-info/
+.eggs/
+venv/
+.env
+*.keras
+
+# Flutter
+mobile_app/.dart_tool/
+mobile_app/.packages
+mobile_app/build/
+mobile_app/.flutter-plugins
+mobile_app/.flutter-plugins-dependencies
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ML output (large files - commit model to repo or use LFS)
+ml_backend/output/*.tflite
+ml_backend/output/*.keras
+# Dataset cache from train_ds.cache() - very large (~30GB)
+ml_backend/output/cache/
+# Merged training data (PlantVillage + extra Kaggle sets)
+ml_backend/combined_data/
+
+# Hierarchical layout copies (same images as combined_data; do not commit)
+ml_backend/hierarchical_data/
+
+# Training images anywhere under ml_backend (explicit; belt-and-suspenders)
+ml_backend/**/*.jpg
+ml_backend/**/*.jpeg
+ml_backend/**/*.JPG
+ml_backend/**/*.JPEG
+ml_backend/**/*.png
+ml_backend/**/*.gif
+ml_backend/**/*.bmp
+ml_backend/**/*.webp
+
+# Kaggle / kagglehub download cache (if present under repo)
+ml_backend/.kaggle-cache/
+
+# Training scratch logs
+ml_backend/*.log
+
+# JSON: ignore generic dumps but keep checked-in manifests
+*.json
+!pubspec.lock
+!mobile_app/assets/hierarchy_manifest.json
+!ml_backend/crop_datasets_manifest.json
+
+# LaTeX sources and build artifacts
+*.tex
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+
+# OS
+.DS_Store
+Thumbs.db

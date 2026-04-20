@@ -1,0 +1,7 @@
+{
+  "enabled": false,
+  "comment": "Set enabled to true after training hierarchical models and copying assets from ml_backend/output/hierarchical/",
+  "crop_model": "assets/models/hierarchical/cropguard_crop.tflite",
+  "crop_labels": "assets/labels/hierarchical/crop_labels.txt",
+  "crops": []
+}

@@ -1,0 +1,39 @@
+{
+  "_readme": "Sources merged AFTER baseline: python merge_datasets.py -o combined_data  then  python merge_extended_sources.py --combined combined_data. Each enabled row downloads from Kaggle (kagglehub) and adds folders EXT_<prefix>_<class>. Set enabled to false to skip. Replace null kaggle_id when you find a dataset on kaggle.com/datasets.",
+  "sources": [
+    {"kaggle_id": "shawontmsez/ccmt-multi-crop-plant-disease-detection-dataset", "prefix": "ccmt", "crop": "multi_crop", "enabled": true, "note": "Multi-crop / many classes — strong boost toward 50+ crops"},
+
+    {"kaggle_id": "saroz014/plant-diseases", "prefix": "saroz", "crop": "mixed", "enabled": true, "note": "Broad plant disease set"},
+
+    {"kaggle_id": "vbookshelf/rice-leaf-diseases", "prefix": "rice_vbk", "crop": "rice", "enabled": true},
+    {"kaggle_id": "nirmalsankalana/rice-leaf-disease-image", "prefix": "rice_nsk", "crop": "rice", "enabled": false, "note": "Optional extra rice images"},
+
+    {"kaggle_id": "kushagra3204/wheat-plant-diseases", "prefix": "wheat_kush", "crop": "wheat", "enabled": true},
+    {"kaggle_id": "jayaprakashpondy/wheat-leaf-disease", "prefix": "wheat_jp", "crop": "wheat", "enabled": false, "note": "Optional second wheat set"},
+
+    {"kaggle_id": "nguynphancminh/cotton-leaf-diseases-dataset", "prefix": "cotton_ng", "crop": "cotton", "enabled": true},
+
+    {"kaggle_id": "nirmalsankalana/sugarcane-leaf-disease-dataset", "prefix": "cane_nsk", "crop": "sugarcane", "enabled": true},
+    {"kaggle_id": "pritpal2873/sugarcane-leaf-disease-dataset", "prefix": "cane_prit", "crop": "sugarcane", "enabled": false, "note": "Alternate sugarcane"},
+
+    {"kaggle_id": "alihussainkhan24/red-rot-sugarcane-disease-leaf-dataset", "prefix": "cane_redrot", "crop": "sugarcane", "enabled": false, "note": "Sugarcane red rot focused"},
+
+    {"kaggle_id": "plant-pathology-2020-fgvc7", "prefix": "ppath20", "crop": "apple_cherry_peach_pear", "enabled": true, "note": "Structured competition data — nested dirs; script uses best class-like root"},
+
+    {"kaggle_id": "plant-pathology-2021-fgvc8", "prefix": "ppath21", "crop": "apple_cherry_peach_pear", "enabled": false, "note": "Enable after verifying layout"},
+
+    {"kaggle_id": "emmarex/plantdisease", "prefix": "em_plant", "crop": "mixed", "enabled": false, "note": "Enable if kaggle.com/emmarex/plantdisease exists for your account"},
+
+    {"kaggle_id": "vipoooool/new-plant-diseases-dataset", "prefix": "vip_newplant", "crop": "mixed", "enabled": true, "note": "Multi-class new plant diseases set"},
+
+    {"kaggle_id": "adithyantg/black-pepper-leaf-disease-mini-dataset", "prefix": "pepper_blk", "crop": "black_pepper", "enabled": true, "note": "Black pepper leaf diseases"},
+
+    {"kaggle_id": "maimunulkjisan/rice-leaf-dataset-from-mendeley-data", "prefix": "rice_mend", "crop": "rice", "enabled": false, "note": "Enable if you need more rice"},
+
+    {"kaggle_id": "iamhungundji98/wheat-leaf-disease", "prefix": "wheat_ih", "crop": "wheat", "enabled": false, "note": "Alternate wheat"},
+
+    {"kaggle_id": null, "prefix": "custom_01", "crop": "fill_me", "enabled": false, "note": "Add kaggle_id from Kaggle (e.g. banana, coffee, tea) and set enabled true"},
+
+    {"kaggle_id": null, "prefix": "custom_02", "crop": "fill_me", "enabled": false, "note": "Duplicate this block in JSON for more sources"}
+  ]
+}
