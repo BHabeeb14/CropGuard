@@ -30,6 +30,7 @@ flutter:
   assets:
     - assets/models/
     - assets/labels/
+    - assets/advice/
     - assets/hierarchy_manifest.json
     - assets/models/hierarchical/
     - assets/labels/hierarchical/

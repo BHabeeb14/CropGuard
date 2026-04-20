@@ -61,7 +61,7 @@ CropGuard-EdgeAI-Mobile/
 │
 ├── README.md
 └── .gitignore
-
+```
 ---
 
 ## Setup Instructions

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../services/advice_service.dart';
 import '../services/inference_service.dart';
 import 'camera_screen.dart';
 
@@ -23,7 +24,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadModel() async {
     try {
-      await _inferenceService.loadModel();
+      await Future.wait([
+        _inferenceService.loadModel(),
+        AdviceService.instance.load(),
+      ]);
       setState(() {
         _modelLoaded = !_inferenceService.isWebPlatform;
         _loadError = null;

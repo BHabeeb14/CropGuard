@@ -153,6 +153,112 @@ class _CameraScreenState extends State<CameraScreen> {
     }
   }
 
+  Widget _buildResultPanel(BuildContext context) {
+    final result = _lastResult!;
+    final rawLabel = result['label'] as String;
+    final confidence = result['confidence'] as double;
+    final confidencePct = (confidence * 100).toStringAsFixed(1);
+
+    if (_lowConfidence) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        color: Colors.amber.withValues(alpha: 0.3),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Unable to identify',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Please capture a clear image of a plant leaf. The model is '
+              'trained on leaf images only.',
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Model confidence: $confidencePct%',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ),
+      );
+    }
+
+    final parsed = AdviceService.parseLabel(rawLabel);
+    final advice = AdviceService.instance.adviceFor(rawLabel);
+    final severityColor = _getSeverityColor(advice.severity);
+    final confidenceBand = AdviceService.confidenceBand(confidence);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      color: severityColor.withValues(alpha: 0.15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  parsed.isHealthy
+                      ? '${parsed.crop} — healthy'
+                      : '${parsed.crop} — ${parsed.condition}',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+              _Chip(
+                label: 'Severity: ${advice.severity}',
+                color: severityColor,
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(advice.summary, style: Theme.of(context).textTheme.bodyMedium),
+          if (advice.immediate.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            _Section(title: 'Do now', items: advice.immediate),
+          ],
+          if (advice.treatmentOrganic.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            _Section(title: 'Organic treatment', items: advice.treatmentOrganic),
+          ],
+          if (advice.treatmentChemical.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            _Section(
+              title: 'Chemical treatment (follow label)',
+              items: advice.treatmentChemical,
+            ),
+          ],
+          if (advice.prevention.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            _Section(title: 'Prevent recurrence', items: advice.prevention),
+          ],
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              _Chip(
+                label: 'Model confidence: $confidencePct% ($confidenceBand)',
+                color: Colors.blueGrey,
+              ),
+              _Chip(
+                label: 'Re-scan in ${advice.followUpDays} days',
+                color: Colors.blueGrey,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _controller?.dispose();
@@ -181,45 +287,12 @@ class _CameraScreenState extends State<CameraScreen> {
           Expanded(
             child: CameraPreview(_controller!),
           ),
-          if (_lastResult != null) ...[
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              color: _lowConfidence
-                  ? Colors.amber.withValues(alpha: 0.3)
-                  : _getSeverityColor(
-                      AdviceService.getSeverity(
-                        _lastResult!['label'] as String,
-                        _lastResult!['confidence'] as double,
-                      ),
-                    ).withValues(alpha: 0.3),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _lowConfidence
-                        ? 'Unable to identify'
-                        : (_lastResult!['label'] as String)
-                            .replaceAll('___', ' ')
-                            .replaceAll('_', ' '),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _lowConfidence
-                        ? 'Please capture a clear image of a plant leaf. The model is trained on leaf images only.'
-                        : AdviceService.getAdvice(
-                            _lastResult!['label'] as String,
-                            _lastResult!['confidence'] as double,
-                          ),
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
+          if (_lastResult != null)
+            Expanded(
+              child: SingleChildScrollView(
+                child: _buildResultPanel(context),
               ),
             ),
-          ],
           Padding(
             padding: const EdgeInsets.all(16),
             child: SizedBox(
@@ -239,6 +312,74 @@ class _CameraScreenState extends State<CameraScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _Section extends StatelessWidget {
+  final String title;
+  final List<String> items;
+
+  const _Section({required this.title, required this.items});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: Theme.of(context)
+              .textTheme
+              .labelLarge
+              ?.copyWith(fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 2),
+        ...items.map(
+          (e) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 1),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('• '),
+                Expanded(
+                  child: Text(
+                    e,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Chip extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  const _Chip({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.6)),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
       ),
     );
   }
