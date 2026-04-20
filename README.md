@@ -53,7 +53,7 @@ CropGuard-EdgeAI-Mobile/
 │   ├── pubspec.yaml
 │   └── ...
 │
-├── docs/                                   # Dissertation chapters + figures
+├── docs/                                   # Docs + figures
 │   ├── images/                             # Thesis screenshots (onboarding, home, etc.)
 │   ├── DISSERTATION_STATUS_REPORT.txt
 │   ├── PREPROCESSING_ALIGNMENT.md
@@ -61,9 +61,6 @@ CropGuard-EdgeAI-Mobile/
 │
 ├── README.md
 └── .gitignore
-```
-
-> **Note:** LaTeX chapter sources (`*.tex`) and training-image directories (`ml_backend/combined_data/`, `ml_backend/hierarchical_data/`, `ml_backend/.kaggle-cache/`) are intentionally ignored by git to keep the repo lean.
 
 ---
 
